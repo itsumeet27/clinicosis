@@ -1,8 +1,6 @@
 <!doctype html>
-
-<?php include('includes/dbconfig.php'); ?>
-<?php 
-    session_start(); 
+<?php  
+    include('includes/dbconfig.php');
 ?>
 <html lang="en">
     <head>
@@ -11,11 +9,12 @@
         <title>Clinicosis | An Initiative by Dr. Rohit Srivastava</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+        <link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
             <div class="container">
-                <a class="navbar-brand" href="#">Clinicosis</a>
+                <a class="navbar-brand" href="/">Clinicosis</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -89,8 +88,7 @@
                 $password = $_POST['login-password'];
 
                 $login_query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
-                
-                
+                                
                 $login_result = mysqli_query($conn, $login_query);
                 
                 if($login_result) {
