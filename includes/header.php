@@ -10,16 +10,18 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Berkshire+Swash|Montserrat|Poppins" rel="stylesheet">
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top py-3">
             <div class="container">
-                <a class="navbar-brand" href="/">Clinicosis</a>
+                <a class="navbar-brand" href="/" style="font-family: Poppins;font-size: 24px"><b>Clinicosis</b></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown" style="flex-grow: inherit">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav" style="font-family: Poppins">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/">Home</a>
                         </li>

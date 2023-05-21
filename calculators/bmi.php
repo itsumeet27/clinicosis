@@ -18,11 +18,11 @@
                     <h4 class="h4-responsive">What is Body Mass Index (BMI)?</h4>
                     <p class="mt-3">Body mass index is a value derived from the mass and height of a person. The BMI is defined as the body mass divided by the square of the body height, and is expressed in units of kg/m²</p>
                 </div>
-                <div class="calculator-details mt-4">
+                <div class="calculator-details mt-5">
                     <h4 class="h4-responsive">Why Body Mass Index (BMI) is important?</h4>
                     <p class="mt-3">BMI is an estimate of body fat and a good gauge of your risk for diseases that can occur with more body fat. The <b>higher your BMI</b>, the higher your risk for certain diseases such as <b>heart disease, high blood pressure, type 2 diabetes, gallstones, breathing problems, and certain cancers</b>.</p>
                 </div>
-                <div class="calculator-details mt-4">
+                <div class="calculator-details mt-5">
                     <h4 class="h4-responsive">Is Body Mass Index reliable?</h4>
                     <p class="mt-3">For most adults, BMI gives a good estimate of your weight-related health risks. If your <b>BMI is over 35</b>, your weight is definitely putting your <b>health at risk</b>, regardless of the factors below. However, there are some situations where BMI may underestimate or overestimate these risks in the 25-35 BMI range. The main ones are:</p>
                 </div>
@@ -67,14 +67,18 @@
         function calculateBMI() {
             var height = $("#height").val();
             var weight = $("#weight").val();
-                        
-            $.post("../includes/bmi_submit.php", { 
+
+            if(height != "" && weight != "") {
+                $.post("../includes/bmi_submit.php", { 
                 weight: weight, 
                 height: height
-            },
-            function(data) {
-                $('#bmi_result').html(data);
-            });
+                },
+                function(data) {
+                    $('#bmi_result').html(data);
+                });
+            }
+                        
+            
         }
     </script>
 
