@@ -47,6 +47,7 @@
                             <button type="button" class="btn btn-success btn-md mx-1" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
                             <?php } ?>
                             <?php if(isset($_SESSION['username'])) { ?>
+                            <a href="dasboard/doctor.php" class="btn btn-primary btn-md mx-1">Dashboard</a>
                             <a href="logout.php" class="btn btn-danger btn-md mx-1">Logout</a>
                             <?php } ?>
                         </li>
