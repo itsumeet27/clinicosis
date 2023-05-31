@@ -23,17 +23,17 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown" style="flex-grow: inherit">
                     <ul class="navbar-nav" style="font-family: Poppins">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">Home</a>
+                            <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Features</a>
+                            <a class="nav-link" href="about.php">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link" href="medlog.php">Medlog</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Calculators
+                                Calculate
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="calculators/bmi.php">BMI (Body Mass Index)</a></li>
@@ -47,7 +47,7 @@
                             <button type="button" class="btn btn-success btn-md mx-1" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
                             <?php } ?>
                             <?php if(isset($_SESSION['username'])) { ?>
-                            <a href="../logout.php" class="btn btn-danger btn-md mx-1">Logout</a>
+                            <a href="logout.php" class="btn btn-danger btn-md mx-1">Logout</a>
                             <?php } ?>
                         </li>
                     </ul>
@@ -73,7 +73,8 @@
                                 <label for="login-password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="login-password" name="login-password" placeholder="Enter your password">
                             </div>
-                            <input type="submit" class="btn btn-success" value="Submit" name="login_submit">
+                            <button type="button" class="btn btn-success" name="login_submit" onclick="loginUser()">Submit</button>
+                            <div id="login_message"></div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -82,32 +83,6 @@
                 </div>
             </div>
         </div>
-
-        <?php 
-
-            if(isset($_POST['login_submit'])) {
-                $username = $_POST['login-username'];
-                $password = $_POST['login-password'];
-
-                $login_query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
-                                
-                $login_result = mysqli_query($conn, $login_query);
-                
-                if($login_result) {
-                    $row = mysqli_fetch_assoc($login_result);
-                    if ($row['username'] == $username && $row['password'] == $password) {
-                        echo "<script>alert('Logged in successfully!')</script>";
-                        $_SESSION['name'] = $row['name'];
-                        $_SESSION['username'] = $row['username'];
-                        $_SESSION['id'] = $row['id'];
-                        echo "<meta http-equiv='refresh' content='0'>";
-                    } else {
-                        echo "<script>alert('Please check your credentials!')</script>";
-                    }
-                }
-            }
-
-        ?>
 
         <!-- Register Modal -->
         <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
@@ -120,12 +95,16 @@
                     <div class="modal-body">
                         <form class="form" method="post">
                             <div class="mb-3">
-                                <label for="register-name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="register-name" name="register-name" placeholder="Enter your name">
+                                <label for="register-as" class="form-label">Register as</label>
+                                <select name="register-as" id="register-as" class="form-control">
+                                    <option name="patient" value="patient">Patient</option>
+                                    <option name="user" value="user">User</option>
+                                    <option name="doctor" value="doctor">Doctor</option>
+                                </select>
                             </div>
                             <div class="mb-3">
-                                <label for="register-email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="register-email" name="register-email" placeholder="Enter your email">
+                                <label for="register-name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="register-name" name="register-name" placeholder="Enter your name">
                             </div>
                             <div class="mb-3">
                                 <label for="register-username" class="form-label">Username</label>
@@ -135,7 +114,8 @@
                                 <label for="register-password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="register-password" name="register-password" placeholder="Enter your password">
                             </div>
-                            <input type="submit" class="btn btn-success" value="Submit" name="register_submit">
+                            <button type="button" class="btn btn-success" name="register_submit" onclick="registerUser()">Submit</button>
+                            <div id="register_message"></div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -144,25 +124,40 @@
                 </div>
             </div>
         </div>
+        
+        <script type="text/javascript">
 
-        <?php
+            function loginUser() {
+                var username = $("#login-username").val();
+                var password = $("#login-password").val();
 
-            if(isset($_POST['register_submit'])) {
-                $name = $_POST['register-name'];
-                $email = $_POST['register-email'];
-                $username = $_POST['register-username'];
-                $password = $_POST['register-password'];
-
-                $query = "INSERT INTO users (`name`, `email`, `username`, `password`) VALUES ('$name', '$email', '$username', '$password')";
-                $result = mysqli_query($conn, $query);
-                if($result) {
-                    echo "<script>alert('You are successfully registered with us!')</script>";
-                } else {
-                    echo "<script>alert('Error! Please try again later.')</script>";
+                if(username != "" && password != "") {
+                    $.post("login.php", {
+                        username: username, 
+                        password: password
+                    },
+                    function(data) {
+                        $('#login_message').html(data);
+                    });
                 }
-                mysqli_close($conn);
             }
 
-        ?>
-    </body>
-</html>
+            function registerUser() {
+                var register_as = document.getElementById('register-as').value
+                var name = $('#register-name').val();
+                var username = $("#register-username").val();
+                var password = $("#register-password").val();
+
+                if(register_as != "" && name != "" && username != "" && password != "") {
+                    $.post("register.php", { 
+                        register_as: register_as,
+                        name: name,
+                        username: username, 
+                        password: password
+                    },
+                    function(data) {
+                        $('#register_message').html(data);
+                    });
+                }
+            }
+        </script>

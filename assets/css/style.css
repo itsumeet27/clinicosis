@@ -1,9 +1,9 @@
-p, li {
-    font-family: Montserrat!important;
+p {
+    font-family: Poppins!important;
     line-height: 1.7rem;
 }
 
-h1, h2, h3, h4, h5, h6, .btn {
+h1, h2, h3, h4, h5, h6, .btn, ul li {
     font-family: Poppins!important;
 }
 
