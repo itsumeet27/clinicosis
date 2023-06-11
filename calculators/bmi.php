@@ -2,6 +2,8 @@
     session_start();
     include('../includes/header.php');
     include('../includes/dbconfig.php');
+
+    $doctor_id = 0;
 ?>
     <div style="height: 35vh; background-image: url(https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80); background-size: cover; background-position: center;" class="position-relative w-100">
         <div class="position-absolute text-white d-flex flex-column align-items-start justify-content-center" style="top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0,0,0,.7);">
@@ -72,78 +74,83 @@
                     <h5 class="modal-title">Save Result</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form class="form" method="post">
+                <div class="modal-body">                        
                         <div class="mb-3">
-                            <label for="save-for" class="form-label">Save Result For</label>
-                            <select name="save-for" id="save-for" class="form-control" onchange='saveDataFor()'>
-                                <option name="patient" value="N/A">Select Patient or Doctor</option>
-                                <option name="patient" value="patient">Patient</option>
-                                <option name="self" value="self">Self</option>
-                            </select>
-                        </div>
-                        
-                        <div class="mb-3">
-                                <div id="patient-dropdown">
-                                    <?php 
-                                        if(isset($_SESSION['id'])) { 
-                                            $user_id = $_SESSION['id'];
-                                            $getDoctor = mysqli_query($conn, "SELECT * FROM doctors WHERE user_id = $user_id");
-                                            if($getDoctor) {
-                                                $row = mysqli_fetch_assoc($getDoctor);
-                                                $doctor_id = $row['doctor_id'];
-                                            }
-
-                                            $fetchPatients = mysqli_query($conn, "SELECT u.name, u.id FROM users u INNER JOIN patients p WHERE p.doctor_id = $doctor_id AND u.id = p.user_id");
-                                            if($fetchPatients) {
-                                                ?>
+                            <div>
+                                <?php 
+                                    if(isset($_SESSION['id'])) { 
+                                        $user_id = $_SESSION['id'];
+                                        $getDoctor = mysqli_query($conn, "SELECT * FROM doctors WHERE user_id = $user_id");
+                                        if(mysqli_num_rows($getDoctor) > 0) {
+                                            $row = mysqli_fetch_assoc($getDoctor);
+                                            $doctor_id = $row['doctor_id'];
+                                            ?>                                                 
+                                            <div class="mb-3">
+                                                <label for="save-for" class="form-label">Save Result For</label>
+                                                <select name="save-for" id="save-for" class="form-control" onchange='saveDataFor()'>
+                                                    <option name="n/a" value="N/A">Select Patient or Doctor</option>
+                                                    <option name="patient" value="patient">Patient</option>
+                                                    <option name="self" value="self">Self</option>
+                                                </select>
+                                            </div>
+                                            <div id="patient-dropdown">
                                                 <div class="form-group mb-3">
-                                                    <label for="select_patient" class="form-label">Select Patient</label>
-                                                    <select name="select_patient" id="select_patient" class="form-control" onchange='saveDataFor()'>
-                                                        <option value="N/A">Select Patient</option>
-                                                        <?php while($row = mysqli_fetch_assoc($fetchPatients)): ?>
-                                                            <option value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></option>
-                                                        <?php endwhile; ?>
+                                                    <?php
+                                                        $fetchPatients = mysqli_query($conn, "SELECT u.name, u.id FROM users u INNER JOIN patients p ON u.id = p.user_id WHERE p.doctor_id = $user_id");
+                                                        if(mysqli_num_rows($fetchPatients) > 0) {
+                                                        ?>
+                                                        <label for="select_patient" class="form-label">Select Patient</label>
+                                                        <select name="select_patient" id="select_patient" class="form-control" onchange='saveDataFor()'>
+                                                            <option value="N/A">Select Patient</option>
+                                                            <?php while($row = mysqli_fetch_assoc($fetchPatients)): ?>
+                                                                <option value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></option>
+                                                            <?php endwhile; ?>
+                                                        </select>
+                                                    <?php } else { ?>
+                                                    <p class="alert alert-danger mt-2 p-2 px-3" style="font-size: 13px">Currently, you have no patients assigned</p>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                            <div id="patient_records">
+                                                <div class="mb-3">
+                                                    <label for="patient-name" class="form-label">Name</label>
+                                                    <input type="text" class="form-control" id="patient-name" name="patient-name" placeholder="Enter Patient Name" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="patient-age" class="form-label">Age</label>
+                                                    <input type="number" class="form-control" id="patient-age" name="patient-age" placeholder="Enter Patient Age" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="patient-username" class="form-label">Username</label>
+                                                    <input type="text" class="form-control" id="patient-username" name="patient-username" placeholder="Enter Patient Username" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="patient-sex" class="form-label">Sex</label>
+                                                    <select name="patient-sex" id="patient-sex" class="form-control" required> 
+                                                        <option value="N/A">Select Patient Sex</option>
+                                                        <option name="male" value="male">Male</option>
+                                                        <option name="female" value="female">Female</option>
+                                                        <option name="other" value="other">Other</option>
                                                     </select>
                                                 </div>
-                                                <?php
-                                            }
-                                        }
-                                    ?>
-                                </div>
-                            <div id="patient_records">
-                                <div class="mb-3">
-                                    <label for="patient-name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="patient-name" name="patient-name" placeholder="Enter Patient Name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="patient-age" class="form-label">Age</label>
-                                    <input type="number" class="form-control" id="patient-age" name="patient-age" placeholder="Enter Patient Age" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="patient-username" class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="patient-username" name="patient-username" placeholder="Enter Patient Username" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="patient-sex" class="form-label">Sex</label>
-                                    <select name="patient-sex" id="patient-sex" class="form-control" required> 
-                                        <option value="N/A">Select Patient Sex</option>
-                                        <option name="male" value="male">Male</option>
-                                        <option name="female" value="female">Female</option>
-                                        <option name="other" value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="patient-diagnosis" class="form-label">Diagnosis</label>
-                                    <input type="text" class="form-control" id="patient-diagnosis" name="patient-diagnosis" placeholder="Enter Patient Diagnosis" required>
-                                </div>
+                                                <div class="mb-3">
+                                                    <label for="patient-diagnosis" class="form-label">Diagnosis</label>
+                                                    <input type="text" class="form-control" id="patient-diagnosis" name="patient-diagnosis" placeholder="Enter Patient Diagnosis" required>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        } else {
+                                            echo "<p class='py-2'>Do you want to save your bmi value</p>";
+                                        }                                         
+                                    }
+                                ?>
                             </div>
                         </div>
                         
-                        <button type="button" class="btn btn-success" name="save_patient_submit" onclick="saveBMI()">Submit</button>
+                        <div id="save-response"></div>
+                        <button type="button" class="btn btn-success" name="save_patient_submit" onclick="<?php if($doctor_id != 0) { ?>saveBMI()<?php } else { ?>saveUserBMI()<?php }?>">Submit</button>
                         <div id="save_bmi_result"></div>
                         <div id="login_message"></div>
-                        <div id="save-response"></div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -155,8 +162,8 @@
     
     <script type="text/javascript">
         function calculateBMI() {
-            var height = $("#height").val();
-            var weight = $("#weight").val();
+            var height = document.getElementById("height").value;
+            var weight = document.getElementById("weight").value;
 
             if(height != "" && weight != "") {
                 $.post("../includes/calculations/bmi_submit.php", { 
@@ -165,6 +172,23 @@
                 },
                 function(data) {
                     $('#bmi_result').html(data);
+                });
+            }
+        }
+
+        function saveUserBMI() {
+            var height = $("#height").val();
+            var weight = $("#weight").val();
+            var saveDataFor = "self"
+
+            if(height != "" && weight != "") {
+                $.post("../includes/calculations/save_bmi.php", {
+                    weight: weight, 
+                    height: height,
+                    saveDataFor: saveDataFor
+                },
+                function(data) {
+                    $('#save_bmi_result').html(data);
                 });
             }
         }
@@ -202,7 +226,16 @@
 
         function saveDataFor() {
             var saveDataFor = document.getElementById("save-for").value;
+            <?php
+                if(mysqli_num_rows($fetchPatients) > 0):
+            ?>
             var savePatient = document.getElementById("select_patient").value;
+
+            if(savePatient == undefined) {
+                savePatient = "";
+            }
+            <?php endif; ?>
+
             if(saveDataFor != "N/A" || savePatient != "N/A") {
                 $.post("../includes/check-patient.php", {
                     saveDataFor: saveDataFor,

@@ -1,6 +1,9 @@
 <!doctype html>
 <?php  
     include('includes/dbconfig.php');
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST');
+    header("Access-Control-Allow-Headers: X-Requested-With");
 ?>
 <html lang="en">
     <head>
@@ -47,7 +50,7 @@
                             <button type="button" class="btn btn-success btn-md mx-1" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
                             <?php } ?>
                             <?php if(isset($_SESSION['username'])) { ?>
-                            <a href="dasboard/doctor.php" class="btn btn-primary btn-md mx-1">Dashboard</a>
+                            <a href="dashboard/" class="btn btn-primary btn-md mx-1">Dashboard</a>
                             <a href="logout.php" class="btn btn-danger btn-md mx-1">Logout</a>
                             <?php } ?>
                         </li>
@@ -98,8 +101,7 @@
                             <div class="mb-3">
                                 <label for="register-as" class="form-label">Register as</label>
                                 <select name="register-as" id="register-as" class="form-control">
-                                    <option name="patient" value="patient">Patient</option>
-                                    <option name="user" value="user">User</option>
+                                    <option name="patient" value="patient" selected>Patient</option>
                                     <option name="doctor" value="doctor">Doctor</option>
                                 </select>
                             </div>

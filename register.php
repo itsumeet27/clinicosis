@@ -1,5 +1,6 @@
 <?php 
     include('includes/dbconfig.php');
+    session_start();
 
     $register_as = $_POST['register_as'];
     $name = $_POST['name'];
@@ -29,9 +30,11 @@
     
     
     if($result) {
-        echo "<p class='alert alert-success mt-2'>You are successfully registered with us!</p>";
+        echo "<p class='alert alert-success mt-3'>You are successfully registered with us!</p>";
+        echo "<script>setTimeout(() => { window.location.reload() }, 2000)</script>";
     } else {
-        echo "<p class='alert alert-danger mt-2'>Error! Please try again later.</p>";
+        echo "<p class='alert alert-danger mt-3'>Error! Please try again later.</p>";
+        echo "<script>setTimeout(() => { window.location.reload() }, 2000)</script>";
     }
     mysqli_close($conn);
 ?>

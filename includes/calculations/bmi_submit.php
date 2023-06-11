@@ -5,7 +5,7 @@
     $bmi = 0.0;
     $weight = $_POST['weight'];
     $height = $_POST['height'];
-    
+
     $height_square = pow($height,2);
 
     $bmi = (float)($weight/$height_square);

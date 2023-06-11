@@ -45,27 +45,44 @@
                     <div class="table-responsive mt-4">
                         <table class="table table-bordered">
                             <thead class="bg-dark bg-gradient text-white">
+                                <th></th>
                                 <th>Name</th>
                                 <th>Age</th>
                                 <th>Sex</th>
                                 <th>Diagnosis</th>
+                                <th>Height</th>
+                                <th>Weight</th>
+                                <th>BMI Value</th>
                                 <th>Created Date</th>
                             </thead>
                             <tbody>
                                 <?php 
-                                    $fetchPatients = mysqli_query($conn, "SELECT u.name, u.age, u.sex, u.diagnosis, u.created_date FROM users u INNER JOIN patients p ON u.id = p.user_id INNER JOIN doctors d ON p.doctor_id = $id");
+                                    $fetchPatients = mysqli_query($conn, "SELECT u.id, u.name, u.age, u.sex, u.diagnosis, b.height, b.weight, b.bmi_value, u.created_date FROM users u INNER JOIN bmi b ON u.id = b.user_id INNER JOIN patients p ON u.id = p.user_id INNER JOIN doctors d ON p.doctor_id = $id");
                                     if($fetchPatients) {
                                         while($row = mysqli_fetch_assoc($fetchPatients)){
+                                            $id = $row['id'];
+                                            $name = $row['name'];
+                                            $age = $row['age'];
+                                            $sex = $row['sex'];
+                                            $diagnosis = $row['diagnosis'];
+                                            $height = $row['height'];
+                                            $weight = $row['weight'];
+                                            $bmi_value = $row['bmi_value'];
+                                            $created_date = $row['created_date'];
+                                        }
                                         ?>
                                         <tr>
-                                            <td><?=$row['name'];?></td>
-                                            <td><?=$row['age'];?></td>
-                                            <td style="text-transform:capitalize"><?=$row['sex'];?></td>
-                                            <td><?=$row['diagnosis'];?></td>
-                                            <td><?=$row['created_date'];?></td>
+                                            <td class="text-center"><a class="text-dark" href="bmi.php?user_id=<?=$id;?>" target="_blank" style="text-decoration: none;font-size:20px" title="Check BMI Trend">&#10148;</a>
+                                            <td><?=$name;?></td>
+                                            <td><?=$age;?></td>
+                                            <td style="text-transform:capitalize"><?=$sex;?></td>
+                                            <td><?=$diagnosis;?></td>
+                                            <td><?=$height;?></td>
+                                            <td><?=$weight;?></td>
+                                            <td><?=$bmi_value;?></td>
+                                            <td><?=$created_date;?></td>
                                         </tr>
                                         <?php
-                                        }
                                     }
                                 ?>
                             </tbody>

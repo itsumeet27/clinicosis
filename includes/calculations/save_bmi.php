@@ -2,17 +2,11 @@
     session_start();
     require_once('../../includes/dbconfig.php');
 
-    $name = $_POST['name'];
-    $age = $_POST['age'];
-    $username = $_POST['username'];
-    $sex = $_POST['sex'];
-    $diagnosis = $_POST['diagnosis'];
-    $save_for = $_POST['saveDataFor'];
-    $selected_patient = $_POST['selected_patient'];
-
     $bmi = 0.0;
     $weight = $_POST['weight'];
     $height = $_POST['height'];
+
+    $save_for = $_POST['saveDataFor'];
     
     $height_square = pow($height,2);
 
@@ -22,7 +16,16 @@
     if(isset($_SESSION['id'])) {
         $id = $_SESSION['id'];
         if($save_for == "patient") {
-            if($selected_patient != "N/A") {
+
+            $name = $_POST['name'];
+            $age = $_POST['age'];
+            $username = $_POST['username'];
+            $sex = $_POST['sex'];
+            $diagnosis = $_POST['diagnosis'];
+            $save_for = $_POST['saveDataFor'];
+            $selected_patient = $_POST['selected_patient'];
+
+            if($selected_patient != "N/A" && $selected_patient != "") {
                 //Add record to selected patient
                 $add_patient_record = mysqli_query($conn, "INSERT INTO bmi (`user_id`, `added_by`, `height`, `weight`, `bmi_value`) VALUES ('$selected_patient', '$id', '$height', '$weight', '$bmi_value')");
                 if($add_patient_record) {
@@ -37,6 +40,7 @@
                     if($fetch_user) {
                         $row = mysqli_fetch_assoc($fetch_user);
                         $user_id = $row['id'];
+
                         //Insert into patients
                         mysqli_query($conn, "INSERT INTO patients (`user_id`, `doctor_id`) VALUES ('$user_id', '$id')");
 

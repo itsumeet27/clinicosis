@@ -8,16 +8,20 @@
     $login_query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";                    
     $login_result = mysqli_query($conn, $login_query);
     
-    if($login_result) {
+    if(mysqli_num_rows($login_result) > 0) {
         $row = mysqli_fetch_assoc($login_result);
         if ($row['username'] == $username && $row['password'] == $password) {
-            echo "<script>alert('Logged in successfully!')</script>";
+            echo "<p class='alert alert-success mt-3'>You're logged in!</p>";
             $_SESSION['name'] = $row['name'];
             $_SESSION['username'] = $row['username'];
             $_SESSION['id'] = $row['id'];
-            echo "<meta http-equiv='refresh' content='0'>";
+            echo "<script>setTimeout(() => { window.location.reload() }, 2000)</script>";
+            
         } else {
-            echo "<script>alert('Please check your credentials!')</script>";
+            echo "<p class='alert alert-danger mt-3'>You have entered wrong credentials, please check!</p>";
         }
+    } else {
+        echo "<p class='alert alert-danger mt-3'>Currently, there are no users registered with us!</p>";
+        echo "<script>setTimeout(() => { window.location.reload() }, 2000)</script>";
     }
 ?>
